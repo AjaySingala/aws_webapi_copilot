@@ -26,14 +26,19 @@ jobs:
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
+          #key: ${{ secrets.EC2_KEY }} # Use key for authentication
           port: 22 # Default SSH port
           source: "./publish/*"
-          target: "/inetpub/wwwroot/aws_webpi" # Path on the EC2 instance
+          target: "C:\\inetpub\\wwwroot\\aws_webpi" # Path on the Windows EC2 instance
 
       - name: Restart IIS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.EC2_HOST }}
           username: ${{ secrets.EC2_USER }}
+          #key: ${{ secrets.EC2_KEY }} # Use key for authentication
+          port: 22 # Default SSH port
           script: |
-            iisreset
+             iisreset
+
+      
