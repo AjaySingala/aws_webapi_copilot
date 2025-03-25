@@ -43,7 +43,7 @@ jobs:
           chmod 600 private_key.pem
 
           # Use SCP to copy files to the EC2 instance
-          scp -i C:\Software\AWS\ajsKeyPair24Mar2025.pem -r ./publish/* Administrator@13.202.94.20:C:\\inetpub\\wwwroot\\aws_webapi\\
+          scp -i private_key.pem -r ./publish/* Administrator@13.202.94.20:C:\\inetpub\\wwwroot\\aws_webapi\\
 
       - name: Restart IIS
         uses: appleboy/ssh-action@master
