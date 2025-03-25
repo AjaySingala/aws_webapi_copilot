@@ -32,6 +32,15 @@ jobs:
       #       powershell -Command "Remove-Item -Path 'C:\\inetpub\\wwwroot\\aws_webapi\\*' -Recurse -Force"
       #       powershell -Command "Copy-Item -Path '/tmp/publish/*' -Destination 'C:\\inetpub\\wwwroot\\aws_webapi\\' -Recurse"
 
+      # Step 2: Install sshpass
+      - name: Install sshpass
+        run: |
+          # Download sshpass for Windows
+          Invoke-WebRequest -Uri "https://github.com/kevinburke/sshpass/releases/download/1.06/sshpass.exe" -OutFile "sshpass.exe"
+          # Add the directory to PATH (if necessary)
+          # [System.Environment]::SetEnvironmentVariable("Path", $env:Path + ";./", [System.EnvironmentVariableTarget]::Machine)
+
+
       - name: Transfer files to EC2 instance using SCP
         env:
           SSH_PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
@@ -43,7 +52,7 @@ jobs:
           chmod 600 private_key.pem
 
           # Use SCP to copy files to the EC2 instance
-          scp -i private_key.pem -r ./publish/* Administrator@13.202.94.20:C:\\inetpub\\wwwroot\\aws_webapi\\
+          sshpass.exe -p "Admin@123" scp -i private_key.pem -r ./publish/* Administrator@13.202.94.20:C:\\inetpub\\wwwroot\\aws_webapi\\
 
       - name: Restart IIS
         uses: appleboy/ssh-action@master
