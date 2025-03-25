@@ -1,0 +1,39 @@
+name: Deploy ASP.NET Core Web API to AWS EC2
+
+on:
+  push:
+    branches:
+      - main # Change this to your default branch if different
+
+jobs:
+  deploy:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '8.0.x' # Use the version of .NET you are targeting
+
+      - name: Publish project
+        run: dotnet publish ./azure-web-app.csproj -c Release -o ./publish
+
+      - name: Copy files to EC2
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          port: 22 # Default SSH port
+          source: "./publish/*"
+          target: "/inetpub/wwwroot/aws_webpi" # Path on the EC2 instance
+
+      - name: Restart IIS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          script: |
+            iisreset
