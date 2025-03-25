@@ -13,10 +13,10 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: '8.0.x' # Use the version of .NET you are targeting
+      # - name: Setup .NET SDK
+      #   uses: actions/setup-dotnet@v1
+      #   with:
+      #     dotnet-version: '9.0.x' # Use the version of .NET you are targeting
 
       - name: Publish project
         run: dotnet publish ./azure-web-app.csproj -c Release -o ./publish
